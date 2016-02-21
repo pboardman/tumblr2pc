@@ -47,8 +47,8 @@ else:
   api_key = args.api_key
 
 # Setting content type to download
-types = {'text': False, 'quote': False, 'link': False, 'answer': False,
-         'video': False, 'audio': False, 'photo': True, 'chat': False} # switch photo to false when arguments work
+types = {'text': True, 'quote': False, 'link': False, 'answer': False,
+         'video': False, 'audio': False, 'photo': True, 'chat': False} # switch all to false when arguments work
 
 ### TEMPORARILY DISABLED
 
@@ -66,19 +66,19 @@ types = {'text': False, 'quote': False, 'link': False, 'answer': False,
 ################################################################
 # get function for all types of posts
 ################################################################
-def get_photo(api_json, directory): #pic_url, directory
-  output = output_dir + '/' + directory + "/" #+ str(pic_url.split("/")[-1])
-
-  # Create directory
-  if not os.path.isdir(output):
-      os.makedirs(output)
+def get_photo(api_json, directory):
   # Get every image in the post
   for i in api_json["response"]["posts"]:
     for j in i["photos"]:
       filename = str(j["original_size"]["url"].split("/")[-1])
-      urllib.urlretrieve(j["original_size"]["url"], output + filename)
+      urllib.urlretrieve(j["original_size"]["url"], directory + "/" + filename)
 
-def get_text(): #title, body, directory
+def get_text(api_json, directory):
+  # Getting title and body
+  for i in api_json["response"]["posts"]:
+      title = str(i["title"].encode("utf8"))
+      body = str(i["body"].encode("utf8"))
+  
   text_file = open(directory + "/text.txt", 'w')
   text_file.write(title + "\n\n")
   text_file.write(body)
@@ -150,12 +150,20 @@ def main():
     api_json = url_to_json(base_url + str(x))
     post_type = get_post_type(api_json)
     post_id = get_post_id(api_json)
+    directory = output_dir + '/' + post_id + "/"
+
+    # Posts are only downloaded if their directory does not exist
+    # to prevent redownloading them.
 
     if args.original_post:
       if is_original(api_json) and types[post_type]:
-        globals()["get_" + post_type](api_json, post_id)
+          if not os.path.isdir(directory):
+            os.makedirs(directory)
+            globals()["get_" + post_type](api_json, directory)
     else:
       if types[post_type]:
-        globals()["get_" + post_type](api_json, post_id)
+        if not os.path.isdir(directory):
+          os.makedirs(directory)
+          globals()["get_" + post_type](api_json, directory)
 
 main()
