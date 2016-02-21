@@ -47,21 +47,18 @@ else:
   api_key = args.api_key
 
 # Setting content type to download
-types = {'text': True, 'quote': True, 'link': True, 'answer': False,
-         'video': False, 'audio': False, 'photo': True, 'chat': True} # switch all to false when arguments work
+types = {'text': False, 'quote': False, 'link': False, 'answer': False,
+         'video': False, 'audio': False, 'photo': False, 'chat': False}
 
-### TEMPORARILY DISABLED
-
-#all_false=True
-#for post_type in types:
-  #if args.post_type:
-    #types[post_type] = True
-    #all_false=False
+for post_type in types:
+  if vars(args)[post_type]:
+    types[post_type] = True
+    all_false=False
 
 # If no type option is set download everything
-#if all_false is True:
- # for post_type in types:
-#    types[post_type] = True
+if all_false is True:
+  for post_type in types:
+    types[post_type] = True
 
 ################################################################
 # get function for all types of posts
@@ -139,7 +136,7 @@ def get_post_type(api_json):
   for i in api_json["response"]["posts"]:
     return i["type"]
 
-def is_original(api_json): # maybe with the state variable
+def is_original(api_json):
   # TODO
   return True
 
