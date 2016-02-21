@@ -48,7 +48,7 @@ else:
 
 # Setting content type to download
 types = {'text': True, 'quote': True, 'link': True, 'answer': False,
-         'video': False, 'audio': False, 'photo': True, 'chat': False} # switch all to false when arguments work
+         'video': False, 'audio': False, 'photo': True, 'chat': True} # switch all to false when arguments work
 
 ### TEMPORARILY DISABLED
 
@@ -114,7 +114,11 @@ def get_video(): #url, directory
 def get_audio(): # ???, directory
   print "Audio not implemented yet."
 
-def get_chat(): # title, body, directory
+def get_chat(api_json, directory):
+  for i in api_json["response"]["posts"]:
+      title = str(i["title"].encode("utf8"))
+      body = str(i["body"].encode("utf8"))
+
   chat_file = open(directory + "/chat.txt", 'w')
   chat_file.write(title + "\n\n")
   chat_file.write(body)
