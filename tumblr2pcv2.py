@@ -47,7 +47,7 @@ else:
   api_key = args.api_key
 
 # Setting content type to download
-types = {'text': True, 'quote': True, 'link': False, 'answer': False,
+types = {'text': True, 'quote': True, 'link': True, 'answer': False,
          'video': False, 'audio': False, 'photo': True, 'chat': False} # switch all to false when arguments work
 
 ### TEMPORARILY DISABLED
@@ -85,7 +85,6 @@ def get_text(api_json, directory):
   text_file.close()
 
 def get_quote(api_json, directory):
-
   # Getting text and source
   for i in api_json["response"]["posts"]:
       quote = str(i["text"].encode("utf8"))
@@ -96,10 +95,14 @@ def get_quote(api_json, directory):
   quote_file.write("- " + source)
   quote_file.close()
 
-def get_link(): #url, directory
-  url_file = open(directory + "/url.txt", 'w')
+def get_link(api_json, directory):
+  # Getting text and source
+  for i in api_json["response"]["posts"]:
+      url = str(i["url"].encode("utf8"))
+
+  url_file = open(directory + "/link.txt", 'w')
   url_file.write(url)
-  quote_file.close()
+  url_file.close()
 
 def get_answer(): #???, directory
   print "Answer not implemented yet."
