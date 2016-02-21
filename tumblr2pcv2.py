@@ -47,7 +47,7 @@ else:
   api_key = args.api_key
 
 # Setting content type to download
-types = {'text': True, 'quote': False, 'link': False, 'answer': False,
+types = {'text': True, 'quote': True, 'link': False, 'answer': False,
          'video': False, 'audio': False, 'photo': True, 'chat': False} # switch all to false when arguments work
 
 ### TEMPORARILY DISABLED
@@ -78,13 +78,19 @@ def get_text(api_json, directory):
   for i in api_json["response"]["posts"]:
       title = str(i["title"].encode("utf8"))
       body = str(i["body"].encode("utf8"))
-  
+
   text_file = open(directory + "/text.txt", 'w')
   text_file.write(title + "\n\n")
   text_file.write(body)
   text_file.close()
 
-def get_quote(): #quote, source, directory
+def get_quote(api_json, directory):
+
+  # Getting text and source
+  for i in api_json["response"]["posts"]:
+      quote = str(i["text"].encode("utf8"))
+      source = str(i["source"].encode("utf8"))
+
   quote_file = open(directory + "/quote.txt", 'w')
   quote_file.write(quote + "\n")
   quote_file.write("- " + source)
