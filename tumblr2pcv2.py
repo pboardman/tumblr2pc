@@ -5,6 +5,7 @@ import json
 import os
 import sys
 import urllib
+import youtube_dl
 
 ################################################################
 # Arguments parsing and validation
@@ -104,11 +105,19 @@ def get_link(api_json, directory):
 def get_answer(): #???, directory
   print "Answer not implemented yet."
 
-def get_video(): #url, directory
-  #Use youtube-dl to get videos
-  print "Video not implemented yet."
+def get_video(api_json, directory):
+  # Change dir so youtube-dl download the video at the right place
+  current_dir = os.getcwd()
+  os.chdir(directory)
 
-def get_audio(): # ???, directory
+  for i in api_json["response"]["posts"]:
+      with youtube_dl.YoutubeDL() as ydl:
+        ydl.download([i["permalink_url"]])
+
+  os.chdir(current_dir)
+
+
+def get_audio():
   print "Audio not implemented yet."
 
 def get_chat(api_json, directory):

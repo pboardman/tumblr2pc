@@ -11,5 +11,8 @@ Just run the script like this:
 
 ## Notes for tumblr2pcv2.py
 
+Requirement:
+- youtube-dl
+
 This version use the tumblr API v2 but it is not complete.
-Only photo post download works for now.
+Some types of posts are not implemented yet.
