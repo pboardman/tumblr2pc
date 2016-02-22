@@ -11,8 +11,13 @@ Just run the script like this:
 
 ## Notes for tumblr2pcv2.py
 
+This version use the tumblr API v2 but it is not complete.
+Some types of posts are not implemented yet.
+
 Requirement:
 - youtube-dl
 
-This version use the tumblr API v2 but it is not complete.
-Some types of posts are not implemented yet.
+
+TODO:
+- loading bar ( [===   ]50% )
+- implement sound posts download

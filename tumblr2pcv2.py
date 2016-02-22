@@ -35,8 +35,12 @@ output_dir = args.output
 if not os.path.isdir(output_dir):
     print "Output Directory does not exist.."
     exit(1)
-if output_dir.endswith('/'):
-  output_dir = output_dir[:-1]
+
+#Creating directory to store this blog posts
+output_dir = output_dir + "/" + blog_name
+if not os.path.isdir(output_dir):
+  os.makedirs(output_dir)
+
 
 # Setting API key var
 api_key = ""
@@ -51,6 +55,7 @@ else:
 types = {'text': False, 'quote': False, 'link': False, 'answer': False,
          'video': False, 'audio': False, 'photo': False, 'chat': False}
 
+all_false=True
 for post_type in types:
   if vars(args)[post_type]:
     types[post_type] = True
@@ -102,7 +107,7 @@ def get_link(api_json, directory):
   url_file.write(url)
   url_file.close()
 
-def get_answer(): #???, directory
+def get_answer(api_json, directory):
   print "Answer not implemented yet."
 
 def get_video(api_json, directory):
@@ -111,13 +116,14 @@ def get_video(api_json, directory):
   os.chdir(directory)
 
   for i in api_json["response"]["posts"]:
-      with youtube_dl.YoutubeDL() as ydl:
-        ydl.download([i["permalink_url"]])
+      if 'permalink_url' in i:
+        with youtube_dl.YoutubeDL() as ydl:
+          ydl.download([i["permalink_url"]])
 
   os.chdir(current_dir)
 
 
-def get_audio():
+def get_audio(api_json, directory):
   print "Audio not implemented yet."
 
 def get_chat(api_json, directory):
