@@ -152,8 +152,11 @@ def get_post_type(api_json):
     return i["type"]
 
 def is_original(api_json):
-  # TODO
-  return True
+  for i in api_json["response"]["posts"]:
+      if "reblogged_from_id" in i:
+        return False
+      else:
+        return True
 
 def url_to_json(URL):
   return json.loads(urllib.urlopen(URL).read())
@@ -163,7 +166,7 @@ def url_to_json(URL):
 ################################################################
 def main():
   # Setting the max post to get
-  base_url = "http://api.tumblr.com/v2/blog/"+ blog_name +"/posts?api_key="+ api_key + "&filter=text&limit=1&offset="
+  base_url = "http://api.tumblr.com/v2/blog/"+ blog_name +"/posts?api_key="+ api_key + "&filter=text&reblog_info=true&limit=1&offset="
   max_post = get_max_post(base_url + "0")
 
   if args.stop_after:
