@@ -25,10 +25,11 @@ Installing requirements:
 
 ## Notes
 
-Downloading audio post is not implemented yet.
+Downloading audio and answer post is not implemented yet.
 
 
 ## TODO
 - implement audio post download
+- implement answer post download
 - loading bar ( [===   ]50% )
 - Download likes
