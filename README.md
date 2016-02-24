@@ -1,23 +1,34 @@
 # tumblr2pc
 
-tumblr2pc automatically downloads every image of a tumblr blog.
+tumblr2pc automatically downloads every posts of a tumblr blog.
 
 ## Usage
 
-Just run the script like this:
+To use tumblr2pc.py you need to obtain a tumblr API key, for info on getting an API key check the section below.
 
-```./tumblr2pc.py blog.tumblr.com /output/location```
+Then run the script like this:
 
+```./tumblr2pc.py blog.tumblr.com /output/location api_key```
 
-## Notes for tumblr2pcv2.py
+## Getting an API key
 
-This version use the tumblr API v2 but it is not complete.
-Some types of posts are not implemented yet.
+To get an API key you first need to register an "application" on Tumblr [Here](https://www.tumblr.com/oauth/apps).
 
-Requirement:
+Then, use your "application" info to get your API key [Here](https://api.tumblr.com/console/calls/user/info).
+
+## Requirements
 - youtube-dl
 
+Installing requirements:
+- ```pip install youtube-dl```
 
-TODO:
+
+## Notes
+
+Downloading audio post is not implemented yet.
+
+
+## TODO
+- implement audio post download
 - loading bar ( [===   ]50% )
-- implement sound posts download
+- Download likes
