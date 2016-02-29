@@ -10,7 +10,7 @@ Then run the script like this:
 
 ```./tumblr2pc.py blog_name /output/location api_key```
 
-The api_key argument can be a file containing the api key.
+The api_key argument can be a file containing the api key or the key directly.
 
 ## Getting an API key
 
@@ -27,9 +27,8 @@ Installing requirements:
 
 ## Notes
 
-Downloading audio and answer post is not implemented yet.
+Downloading audio posts is not implemented yet.
 
 
 ## TODO
 - implement audio post download
-- loading bar ( [===   ]50% )

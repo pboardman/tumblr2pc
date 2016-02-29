@@ -148,6 +148,9 @@ def get_video(api_json, directory, likes_or_posts):
     current_dir = os.getcwd()
     os.chdir(directory)
 
+    # Print \r to remove the loading bar before yt-dl output
+    print "\r",
+
     for i in api_json["response"][likes_or_posts]:
             if 'permalink_url' in i:
                 with youtube_dl.YoutubeDL() as ydl:
@@ -157,7 +160,7 @@ def get_video(api_json, directory, likes_or_posts):
 
 
 def get_audio(api_json, directory, likes_or_posts):
-    print "Audio not implemented yet."
+    print "\rAudio not implemented yet."
 
 
 def get_chat(api_json, directory, likes_or_posts):
@@ -252,5 +255,14 @@ def main():
                     os.makedirs(directory)
                     globals()["get_" + post_type](api_json, directory,
                                                   likes_or_posts)
+        # Code for percentage printing
+        percentage = int(float(x) / float(max_post) * 100)
+        print "\r[" + '#'*(percentage/10) +\
+              ' '*(10 - percentage/10) + "]" + str(percentage) + "%",
+
+        sys.stdout.flush()
+
+    print "\r[##########]100%"
+    print "Done!"
 
 main()
