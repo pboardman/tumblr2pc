@@ -1,14 +1,16 @@
 # tumblr2pc
 
-tumblr2pc automatically downloads every posts of a tumblr blog.
+tumblr2pc automatically downloads every posts/likes of a tumblr blog.
 
 ## Usage
 
-To use tumblr2pc.py you need to obtain a tumblr API key, for info on getting an API key check the section below.
+To use tumblr2pc.py you need to obtain a tumblr API key. For info on getting an API key check the section below.
 
 Then run the script like this:
 
-```./tumblr2pc.py blog.tumblr.com /output/location api_key```
+```./tumblr2pc.py blog_name /output/location api_key```
+
+The api_key argument can be a file containing the api key.
 
 ## Getting an API key
 
@@ -30,6 +32,4 @@ Downloading audio and answer post is not implemented yet.
 
 ## TODO
 - implement audio post download
-- implement answer post download
 - loading bar ( [===   ]50% )
-- Download likes
