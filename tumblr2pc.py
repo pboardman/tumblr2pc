@@ -127,7 +127,15 @@ def get_link(api_json, directory):
 
 
 def get_answer(api_json, directory):
-    print "Answer not implemented yet."
+    # Getting question and answer
+    for i in api_json["response"]["posts"]:
+            question = str(i["question"].encode("utf8"))
+            answer = str(i["answer"].encode("utf8"))
+
+    url_file = open(directory + "/answer.txt", 'w')
+    url_file.write("Question: " + question + "\n\n")
+    url_file.write("Answer: " + answer)
+    url_file.close()
 
 
 def get_video(api_json, directory):
@@ -195,9 +203,9 @@ def url_to_json(URL):
 
 def main():
     # Setting the max post to get
-    base_url = "http://api.tumblr.com/v2/blog/" + blog_name +
-    "/posts?api_key=" + api_key +
-    "&filter=text&reblog_info=true&limit=1&offset="
+    base_url = "http://api.tumblr.com/v2/blog/" + blog_name +\
+                "/posts?api_key=" + api_key +\
+                "&filter=text&reblog_info=true&limit=1&offset="
 
     max_post = get_max_post(base_url + "0")
 
