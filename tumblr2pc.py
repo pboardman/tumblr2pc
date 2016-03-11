@@ -17,10 +17,12 @@ parser.add_argument("output",
                     help="output location")
 parser.add_argument("api_key",
                     help="api key or file containing the api key")
-parser.add_argument("-s", "--stop_after",
+parser.add_argument("-s", "--stop-after",
                     help="how much post should be downloaded")
 parser.add_argument("-o", "--original_post", action='store_true',
                     help="Do not download reblogged content")
+parser.add_argument("-T", "--no-tags", action='store_true',
+                    help="Do not download tags")
 parser.add_argument("-L", "--likes", action='store_true',
                     help="Download liked posts from the blog")
 parser.add_argument("-t", "--text", action='store_true',
@@ -196,6 +198,16 @@ def get_post_type(api_json, likes_or_posts):
         return i["type"]
 
 
+def get_tags(api_json, directory, likes_or_posts):
+    for i in api_json["response"][likes_or_posts]:
+        tags = i["tags"]
+
+    chat_file = open(directory + "/tags.txt", 'w')
+    for tag in tags:
+        chat_file.write("{0}\n".format(tag.encode("utf8")))
+    chat_file.close()
+
+
 def is_original(api_json, likes_or_posts):
     for i in api_json["response"][likes_or_posts]:
             if "reblogged_from_id" in i:
@@ -247,14 +259,21 @@ def main():
             if is_original(api_json, likes_or_posts) and types[post_type]:
                     if not os.path.isdir(directory):
                         os.makedirs(directory)
-                        globals()["get_" + post_type](api_json, directory,
+                        globals()["get_" + post_type](api_json,
+                                                      directory,
                                                       likes_or_posts)
+                        if not args.no_tags:
+                            get_tags(api_json, directory, likes_or_posts)
         else:
             if types[post_type]:
                 if not os.path.isdir(directory):
                     os.makedirs(directory)
-                    globals()["get_" + post_type](api_json, directory,
+                    globals()["get_" + post_type](api_json,
+                                                  directory,
                                                   likes_or_posts)
+                    if not args.no_tags:
+                        get_tags(api_json, directory, likes_or_posts)
+
         # Code for percentage printing
         percentage = int(float(x) / float(max_post) * 100)
         print "\r[" + '#'*(percentage/10) +\
