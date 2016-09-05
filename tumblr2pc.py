@@ -11,11 +11,11 @@ import youtube_dl
 # Arguments parsing and validation
 ################################################################
 parser = argparse.ArgumentParser()
-parser.add_argument("tumblr_name",
+parser.add_argument("TUMBLR_NAME",
                     help="name of the tumblr blog")
-parser.add_argument("output",
+parser.add_argument("OUTPUT",
                     help="output location")
-parser.add_argument("api_key",
+parser.add_argument("API_KEY",
                     help="api key or file containing the api key")
 parser.add_argument("-s", "--stop-after",
                     help="how much post should be downloaded")
@@ -44,12 +44,12 @@ parser.add_argument("-c", "--chat", action='store_true',
 args = parser.parse_args()
 
 # Setting download vars
-blog_name = args.tumblr_name
-output_dir = args.output
+blog_name = args.TUMBLR_NAME
+output_dir = args.OUTPUT
 
 # Checking output directory
 if not os.path.isdir(output_dir):
-        print "Output Directory does not exist.."
+        print("Output Directory does not exist..")
         exit(1)
 
 # Creating directory to store this blog posts/likes
@@ -63,12 +63,12 @@ if not os.path.isdir(output_dir):
 
 # Setting API key var
 api_key = ""
-if os.path.isfile(args.api_key):
-    api_file = open(args.api_key, "r")
+if os.path.isfile(args.API_KEY):
+    api_file = open(args.API_KEY, "r")
     api_key = api_file.readline().strip()
     api_file.close()
 else:
-    api_key = args.api_key
+    api_key = args.API_KEY
 
 # Setting content type to download
 types = {'text': False, 'quote': False, 'link': False, 'answer': False,
@@ -151,7 +151,7 @@ def get_video(api_json, directory, likes_or_posts):
     os.chdir(directory)
 
     # Print \r to remove the loading bar before yt-dl output
-    print "\r",
+    print("\r",)
 
     for i in api_json["response"][likes_or_posts]:
             if 'permalink_url' in i:
@@ -162,7 +162,7 @@ def get_video(api_json, directory, likes_or_posts):
 
 
 def get_audio(api_json, directory, likes_or_posts):
-    print "\rAudio not implemented yet."
+    print("\rAudio not implemented yet.")
 
 
 def get_chat(api_json, directory, likes_or_posts):
@@ -259,29 +259,38 @@ def main():
             if is_original(api_json, likes_or_posts) and types[post_type]:
                     if not os.path.isdir(directory):
                         os.makedirs(directory)
+                        try:
+                            globals()["get_" + post_type](api_json,
+                                                          directory,
+                                                          likes_or_posts)
+                            if not args.no_tags:
+                                get_tags(api_json, directory, likes_or_posts)
+                        except:
+                            print("Error downloading {0}".format(post_id))
+                            pass
+        else:
+            if types[post_type]:
+                if not os.path.isdir(directory):
+                    os.makedirs(directory)
+                    try:
                         globals()["get_" + post_type](api_json,
                                                       directory,
                                                       likes_or_posts)
                         if not args.no_tags:
                             get_tags(api_json, directory, likes_or_posts)
-        else:
-            if types[post_type]:
-                if not os.path.isdir(directory):
-                    os.makedirs(directory)
-                    globals()["get_" + post_type](api_json,
-                                                  directory,
-                                                  likes_or_posts)
-                    if not args.no_tags:
-                        get_tags(api_json, directory, likes_or_posts)
+                    except:
+                        print("Error downloading {0}".format(post_id))
+                        pass
 
         # Code for percentage printing
         percentage = int(float(x) / float(max_post) * 100)
-        print "\r[" + '#'*(percentage/10) +\
-              ' '*(10 - percentage/10) + "]" + str(percentage) + "%",
+        sys.stdout.write("\r[" + '#'*(percentage/10) +
+              ' '*(10 - percentage/10) + "]" + str(percentage) + "%")
 
         sys.stdout.flush()
 
-    print "\r[##########]100%"
-    print "Done!"
+    sys.stdout.write("\r[##########]100%")
+    sys.stdout.flush()
+    print("Done!")
 
 main()
