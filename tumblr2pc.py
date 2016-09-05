@@ -219,6 +219,20 @@ def is_original(api_json, likes_or_posts):
 def url_to_json(URL):
     return json.loads(urllib.urlopen(URL).read())
 
+
+# Choose whether to download a post
+def download_check(original_post, post_type, api_json, likes_or_posts):
+    if original_post:
+        if is_original(api_json, likes_or_posts) and types[post_type]:
+            return True
+        else:
+            return False
+    else:
+        if types[post_type]:
+            return True
+        else:
+            return False
+
 ################################################################
 # Main
 ################################################################
@@ -248,28 +262,17 @@ def main():
     # Download loop
     for x in range(0, max_post):
         api_json = url_to_json(base_url + str(x))
-        post_type = get_post_type(api_json, likes_or_posts)
         post_id = get_post_id(api_json, likes_or_posts)
-        directory = output_dir + '/' + post_id + "/"
 
-        # Posts are only downloaded if their directory does not exist
-        # to prevent redownloading them.
+        # Something there is no post in the api response
+        if post_id:
+            post_type = get_post_type(api_json, likes_or_posts)
+            directory = output_dir + '/' + post_id + "/"
 
-        if args.original_post:
-            if is_original(api_json, likes_or_posts) and types[post_type]:
-                    if not os.path.isdir(directory):
-                        os.makedirs(directory)
-                        try:
-                            globals()["get_" + post_type](api_json,
-                                                          directory,
-                                                          likes_or_posts)
-                            if not args.no_tags:
-                                get_tags(api_json, directory, likes_or_posts)
-                        except:
-                            print("Error downloading {0}".format(post_id))
-                            pass
-        else:
-            if types[post_type]:
+            # Posts are only downloaded if their directory does not exist
+            # to prevent redownloading them.
+
+            if download_check(args.original_post, post_type, api_json, likes_or_posts):
                 if not os.path.isdir(directory):
                     os.makedirs(directory)
                     try:
