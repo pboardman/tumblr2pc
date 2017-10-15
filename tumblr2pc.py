@@ -49,8 +49,7 @@ output_dir = args.OUTPUT
 
 # Checking output directory
 if not os.path.isdir(output_dir):
-        print("Output Directory does not exist..")
-        exit(1)
+        os.mkdir(output_dir)
 
 # Creating directory to store this blog posts/likes
 if args.likes:
@@ -150,9 +149,6 @@ def get_video(api_json, directory, likes_or_posts):
     current_dir = os.getcwd()
     os.chdir(directory)
 
-    # Print \r to remove the loading bar before yt-dl output
-    print("\r",)
-
     for i in api_json["response"][likes_or_posts]:
             if 'permalink_url' in i:
                 with youtube_dl.YoutubeDL() as ydl:
@@ -233,10 +229,6 @@ def download_check(original_post, post_type, api_json, likes_or_posts):
         else:
             return False
 
-################################################################
-# Main
-################################################################
-
 
 def main():
     # Checking if we are downloading likes or post
@@ -296,4 +288,9 @@ def main():
     sys.stdout.flush()
     print("Done!")
 
-main()
+
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass
